@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`posjeta` (
   `platitelj` VARCHAR(45) NOT NULL,
   `broj_odraslih` INT NOT NULL,
   `broj_djece` INT NOT NULL,
+  `kontakt` VARCHAR(45) NOT NULL,
+  `trajanje` INT NOT NULL,
   PRIMARY KEY (`id_posjeta`))
 ENGINE = InnoDB;
 
@@ -108,9 +110,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`rezervacije` (
   `id_sobe` INT NOT NULL,
   `id_radnika` INT NOT NULL,
   `id_posjeta` INT NOT NULL,
-  `id_racun` INT NOT NULL,
-  `rezervacijecol` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id_rezervacije`, `rezervacijecol`),
+  `id_racun` INT NULL,
+  PRIMARY KEY (`id_rezervacije`),
   INDEX `fk_rezervacije_sobe1_idx` (`id_sobe` ASC),
   INDEX `fk_rezervacije_radnici1_idx` (`id_radnika` ASC),
   INDEX `fk_rezervacije_posjeta1_idx` (`id_posjeta` ASC),
@@ -166,21 +167,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`steta` (
   `id_stete` INT NOT NULL AUTO_INCREMENT,
-  `naknada` DECIMAL(6,2) NOT NULL,
+  `datum` DATE NOT NULL,
+  `sankcija` DECIMAL(6,2) NOT NULL,
   `opis` TEXT(1000) NOT NULL,
+  `podmireno` TINYINT(1) NOT NULL,
   `id_racuna` INT NOT NULL,
-  `id_sobe` INT NOT NULL,
   PRIMARY KEY (`id_stete`),
   INDEX `fk_steta_racun1_idx` (`id_racuna` ASC),
-  INDEX `fk_steta_sobe1_idx` (`id_sobe` ASC),
   CONSTRAINT `fk_steta_racun1`
     FOREIGN KEY (`id_racuna`)
     REFERENCES `mydb`.`racun` (`id_racuna`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_steta_sobe1`
-    FOREIGN KEY (`id_sobe`)
-    REFERENCES `mydb`.`sobe` (`id_sobe`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
